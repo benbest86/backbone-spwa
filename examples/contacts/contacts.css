@@ -1,0 +1,79 @@
+body {
+  background-color: #CCCCC2;
+  color: #4C4C49;
+  font: 18px 'Gill Sans';
+}
+
+h1 {
+  font-weight: normal;
+  font-size: 175%;
+  padding: 0;
+  margin: 0;
+  margin-bottom: 12px;
+  margin-left: 6px;
+  float: left;
+}
+
+#search {
+  float: right;
+}
+
+#search span {
+  float: left;
+  font-size: 130%;
+  margin-top: 6px;
+  margin-right: 12px;
+  color: #CCCCC2;
+}
+
+#search input {
+  float: right;
+  font-size: 100%;
+  margin-top: 6px;
+}
+
+#main {
+  width: 940px;
+  margin: auto;
+  background: #4C4C49 url(images/bg.png) repeat-x top left;
+  color: #FFFFFF;
+  padding: 6px;
+}
+
+#contact_list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  margin-top: 12px;
+  border: 1px solid #ccccc2;
+  color: #4C4C49;
+  clear: both;
+}
+
+#contact_list li {
+  background-image: url(images/arrow-right.png);
+  background-repeat: no-repeat;
+  background-position: 3px center;
+  padding: 6px 6px 6px 24px;
+}
+
+#contact_list li img {
+  margin-right: 12px;
+}
+
+.name {
+  float: left;
+}
+
+.address {
+  float: right;
+  color: #777772;
+}
+
+.odd { 
+  background-color: #DDDDD2;
+}
+
+.even {
+  background-color: #AAAAA4;
+}

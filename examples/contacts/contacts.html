@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Backbone SPWA Demo: Contact Manager</title>
+    
+    <link rel="stylesheet" href="contacts.css" />
+
+    <script src="../../test/vendor/underscore-1.1.0.js"></script>
+    <script src="../../test/vendor/jquery-1.4.2.js"></script>
+    <script src="../../test/vendor/jquery.ba-hashchange.min.js"></script>
+    <script src="../../backbone.js"></script>
+    <script src="../../backbone.spwa.js"></script>
+    
+    <script id="contact_list-template" type="x-ejs">
+      <% _.each(collection.models, function(model) { %> 
+        <li id="<%= model.htmlId() %>">
+         <%= model.get('name') %>
+         <span class="address"><%= model.get('address') %></span>
+        </li> 
+      <% }); %>
+    </script>
+    
+    <script id="contact-template" type="x-ejs">
+    </script>
+    
+  </head>
+  <body>
+    
+    <div id="main">
+      <h1>Awesome Contacts</h1>
+      
+      <div id="search"><span>Search:</span> <input type="text" name="search" id="search"/></div>
+      
+      <ul id="contact_list"></ul>
+    </div>
+    
+    <div id="edit_contact"></div>
+    
+  </body>
+  
+  <script src="contacts.js"></script>
+</html>
