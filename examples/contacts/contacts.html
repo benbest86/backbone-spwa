@@ -2,16 +2,16 @@
 <html>
   <head>
     <title>Backbone SPWA Demo: Contact Manager</title>
-    
     <link rel="stylesheet" href="contacts.css" />
 
+    <!-- Include dependencies -->
     <script src="../../test/vendor/underscore-1.1.0.js"></script>
     <script src="../../test/vendor/jquery-1.4.2.js"></script>
     <script src="../../test/vendor/jquery.ba-hashchange.min.js"></script>
-    <script src="../../test/vendor/json2.js"></script>
-    <script src="../../backbone.js"></script>
+    <script src="../../test/vendor/backbone.js"></script>
     <script src="../../backbone.spwa.js"></script>
     
+    <!-- Define our templates -->
     <script id="contact_list-template" type="x-ejs">
       <% _.each(collection.models, function(model) { %> 
         <li>
@@ -64,6 +64,7 @@
   </head>
   <body>
     
+    <!-- Setup the skeleton for our application -->
     <div id="main">
       <h1 class="logo">Awesome Contacts</h1>
       <div id="search"><span>Search:</span> <input type="text" name="search" id="search_input"/></div>
@@ -71,17 +72,18 @@
       <div class="main_toolbar">
         <a href="#/new">New contact</a>
       </div>
+      <!-- Everything above here will be shown on every "page." -->
       
+      <!-- Create the top-level elements into which we will render our templates. -->
       <ul id="contact_list"></ul>
-      <div id="contact_details">  </div>
+      <div id="contact_details"></div>
       <form id='contact_form' onSubmit='return false'></form>
       
       <div class="clear">&nbsp;</div>
     </div>
     
-    
-    
   </body>
   
+  <!-- Include our actual application -->
   <script src="contacts.js"></script>
 </html>
