@@ -92,6 +92,8 @@
     }
   });
   
+  Backbone.SPWA.Controller.handleEvents = Backbone.View.handleEvents;
+  
   Backbone.SPWA.InitializeViews = function(view_list) {
     _.each(view_list, function(view,view_name,views){
       if(view instanceof Backbone.View) {} // do nothing
