@@ -62,6 +62,7 @@
     },
   
     render : function() {
+      if(!this.model) { this.model = new Contact({}); }
       this.el.html(this.contactFormTemplate({model: this.model}));
     }, 
     
@@ -74,6 +75,9 @@
       });
       
       this.model.set(data);
+      
+      if(!contacts.getByCid(this.model.cid)) { contacts.add(this.model); }
+      
       location.hash = '/';
     }
   });
@@ -116,11 +120,32 @@
         phone: '5554658878',
         email: 'bill@hotmail.com'
       }));
+      
+      var controller = this;
+      $('#search_input').change(function(){ controller.searchContacts(); });
+    },
+    
+    searchContacts : function() {
+      var term = $('#search_input').val();
+      var regex = new RegExp(term,'i');
+      
+      var matches = _.select(contacts.models, function(model){
+        return model.get('name').match(regex);
+      });
+      
+      // No matches, display error.
+      if(matches.length == 0) { alert('No contacts matched your search criteria.'); $('#search_input').val(''); }
+      // One match, forward them to the contact's detais.
+      if(matches.length == 1) { location.hash = '#/details?cid=' + matches[0].cid; $('#search_input').val(''); }
+      // More than one match, re-display contact list with a new collection, of just these matches.
+      if(matches.length > 1) { this.showContactList({ collection: new ContactStore(matches) }); }
     },
     
     showContactList : function(args) {
       this.hideAll();
       var view = this.getView('ContactList');
+      if(args.collection) { view.collection = args.collection; }
+      else { view.collection = contacts; }
       view.show();
       $('#search_input').focus();
     },
@@ -137,9 +162,7 @@
     },
     
     newContact : function(args) {
-      var model = new Contact()
-      contacts.add(model);
-      this.showContactForm(model);
+      this.showContactForm(undefined);
     },
     
     showContactForm : function (model) {
