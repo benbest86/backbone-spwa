@@ -32,6 +32,10 @@
       $(this.el).hide(); 
     },
     
+    destroy : function() {
+      $(this.el).remove();
+    },
+    
     _configure : function(options) {
       Backbone.View.prototype._configure.call(this, {});
     }
