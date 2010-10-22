@@ -55,9 +55,9 @@
     },
     
     hideAll : function() {
-      for(var view in this.views) {
+      _.each(this.views,function(view){
         if(view.hide) { view.hide(); }
-      }
+      });
     },
     
     _configure : function(options) {

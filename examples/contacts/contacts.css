@@ -4,14 +4,8 @@ body {
   font: 18px 'Gill Sans';
 }
 
-h1 {
-  font-weight: normal;
-  font-size: 175%;
-  padding: 0;
-  margin: 0;
-  margin-bottom: 12px;
-  margin-left: 6px;
-  float: left;
+a {
+  color: #777772;
 }
 
 #search {
@@ -61,19 +55,107 @@ h1 {
   margin-right: 12px;
 }
 
+#contact_list .toolbar { float: right; }
+
+#contact_details {
+  clear: both;
+  border: 1px solid #ccccc2;
+  color: #4C4C49;
+  background-color: #DDDDD2;
+  padding: 6px;
+}
+
+#contact_details h1 {
+  padding: 0;
+  margin: 0;
+  font-size: 130%;
+}
+
+#contact_details .toolbar {
+  padding: 0;
+  margin: 0;
+  font-size: 80%;
+  
+}
+
+#contact_form {
+  clear: both;
+  padding: 12px;
+  border: 1px solid #ccccc2;
+  color: #4C4C49;
+  background-color: #DDDDD2;
+  margin: 0;
+}
+
+#contact_form label {
+  display: block;
+  width: 75px;
+  float: left;
+}
+
+#contact_form input {
+  font-size: 100%;
+}
+
+dl { 
+  margin: 6px;
+  border: 1px solid #ccc;
+  padding: 12px;
+}
+
+dt {
+  float: left;
+  clear: left;
+  width: 100px;
+  text-align: right;
+  font-weight: bold;
+  color: #225588;
+}
+
+dt:after {
+  content: ":";
+}
+dd {
+  margin: 0 0 0 110px;
+  padding: 0 0 0.5em 0;
+}
+
+.main_toolbar {
+  padding-left: 6px;
+  clear: both;
+  margin-bottom: 12px;
+}
+
+.main_toolbar a:link, .main_toolbar a:visited {
+  color: #ccccc2;
+}
+
+.main_toolbar a:hover {
+  color: white;
+}
+
 .name {
   float: left;
 }
 
-.address {
-  float: right;
-  color: #777772;
-}
-
 .odd { 
-  background-color: #DDDDD2;
+  background-color: #AAAAA4;
 }
 
 .even {
-  background-color: #AAAAA4;
+  background-color: #DDDDD2;
+}
+
+.clear {
+  clear: both;
+}
+
+.logo {
+  font-weight: normal;
+  font-size: 175%;
+  padding: 0;
+  margin: 0;
+  margin-bottom: 12px;
+  margin-left: 6px;
+  float: left;
 }

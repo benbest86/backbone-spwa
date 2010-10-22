@@ -8,33 +8,78 @@
     <script src="../../test/vendor/underscore-1.1.0.js"></script>
     <script src="../../test/vendor/jquery-1.4.2.js"></script>
     <script src="../../test/vendor/jquery.ba-hashchange.min.js"></script>
+    <script src="../../test/vendor/json2.js"></script>
     <script src="../../backbone.js"></script>
     <script src="../../backbone.spwa.js"></script>
     
     <script id="contact_list-template" type="x-ejs">
       <% _.each(collection.models, function(model) { %> 
         <li id="<%= model.htmlId() %>">
-         <%= model.get('name') %>
-         <span class="address"><%= model.get('address') %></span>
+         <%= model.get('name') %> | Phone: <%= model.prettyPhone() %>
+         <span class="toolbar">
+          <a href="#/details?cid=<%= model.cid %>">Details</a> | 
+          <a href="#/edit?cid=<%= model.cid %>">Edit</a> |
+          <a href="#/destroy?cid=<%= model.cid %>">Destroy</a>
+         </span>
         </li> 
       <% }); %>
     </script>
     
     <script id="contact-template" type="x-ejs">
+      <h1><%= model.get('name') %></h1> <a href="#/edit?cid=<%= model.cid %>">edit</a> | <a href="#/destroy?cid=<%= model.cid %>">destroy</a>
+      
+      <dl>
+        <dt>Address</dt><dd><%= model.get('address') %>
+        <dt>Phone</dt><dd><%= model.prettyPhone() %>
+        <dt>Email</dt><dd><%= model.get('email') %>
+      </dl>
+      
+      <span class="toolbar">
+        <a href="#/"><< Back to Contact List</a>
+      </span>
+      
+    </script>
+    
+    <script id="contact_form-template" type="x-ejs">
+      <p>
+        <label for="name">Name: </label>
+        <input type="text" name="name" id="name" value="<%= model.get('name')%>" size="30"/>
+      </p><p>
+        <label for="phone">Phone: </label>
+        <input type="text" name="phone" id="phone" value="<%= model.get('phone')%>" size="15"/>
+      </p><p>
+        <label for="address">Address: </label>
+        <input type="text" name="address" id="address" value="<%= model.get('address')%>" size="60"/>
+      </p><p>
+        <label for="email">Email: </label>
+        <input type="text" name="email" id="email" value="<%= model.get('email')%>" size="40"/>
+      </p>
+      
+      <p>
+        <input type="submit" value="Save" id="save"/> or
+        <a href="#/">cancel</a>
+      </p>
     </script>
     
   </head>
   <body>
     
     <div id="main">
-      <h1>Awesome Contacts</h1>
+      <h1 class="logo">Awesome Contacts</h1>
+      <div id="search"><span>Search:</span> <input type="text" name="search" id="search_input"/></div>
       
-      <div id="search"><span>Search:</span> <input type="text" name="search" id="search"/></div>
+      <div class="main_toolbar">
+        <a href="#/new">New contact</a>
+      </div>
       
       <ul id="contact_list"></ul>
+      <div id="contact_details">  </div>
+      <form id='contact_form' onSubmit='return false'></form>
+      
+      <div class="clear">&nbsp;</div>
     </div>
     
-    <div id="edit_contact"></div>
+    
     
   </body>
   
