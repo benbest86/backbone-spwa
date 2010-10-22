@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Backbone SPWA Demo: Contact Manager</title>
+    <link rel="stylesheet" href="contacts.css" />
+
+    <!-- Include dependencies -->
+    <script src="../underscore-1.1.0.js"></script>
+    <script src="../jquery-1.4.2.js"></script>
+    <script src="../jquery.ba-hashchange.min.js"></script>
+    <script src="../backbone.js"></script>
+    <script src="../backbone.spwa.js"></script>
+    
+    <!-- Define our templates -->
+    <script id="contact_list-template" type="x-ejs">
+      <% _.each(collection.models, function(model) { %> 
+        <li>
+         <%= model.get('name') %> | Phone: <%= model.prettyPhone() %>
+         <span class="toolbar">
+          <a href="#/details?cid=<%= model.cid %>">Details</a> | 
+          <a href="#/edit?cid=<%= model.cid %>">Edit</a> |
+          <a href="#/destroy?cid=<%= model.cid %>">Destroy</a>
+         </span>
+        </li> 
+      <% }); %>
+    </script>
+    
+    <script id="contact-template" type="x-ejs">
+      <h1><%= model.get('name') %></h1> <a href="#/edit?cid=<%= model.cid %>">edit</a> | <a href="#/destroy?cid=<%= model.cid %>">destroy</a>
+      
+      <dl>
+        <dt>Address</dt><dd><%= model.get('address') %>
+        <dt>Phone</dt><dd><%= model.prettyPhone() %>
+        <dt>Email</dt><dd><%= model.get('email') %>
+      </dl>
+      
+      <span class="toolbar">
+        <a href="#/"><< Back to Contact List</a>
+      </span>
+      
+    </script>
+    
+    <script id="contact_form-template" type="x-ejs">
+      <p>
+        <label for="name">Name: </label>
+        <input type="text" name="name" id="name" value="<%= model.get('name')%>" size="30"/>
+      </p><p>
+        <label for="phone">Phone: </label>
+        <input type="text" name="phone" id="phone" value="<%= model.get('phone')%>" size="15"/>
+      </p><p>
+        <label for="address">Address: </label>
+        <input type="text" name="address" id="address" value="<%= model.get('address')%>" size="60"/>
+      </p><p>
+        <label for="email">Email: </label>
+        <input type="text" name="email" id="email" value="<%= model.get('email')%>" size="40"/>
+      </p>
+      
+      <p>
+        <input type="submit" value="Save" id="save"/> or
+        <a href="#/">cancel</a>
+      </p>
+    </script>
+    
+  </head>
+  <body>
+    
+    <!-- Setup the skeleton for our application -->
+    <div id="main">
+      <h1 class="logo">Awesome Contacts</h1>
+      <div id="search"><span>Search:</span> <input type="text" name="search" id="search_input"/></div>
+      
+      <div class="main_toolbar">
+        <a href="#/new">New contact</a>
+      </div>
+      <!-- Everything above here will be shown on every "page." -->
+      
+      <!-- Create the top-level elements into which we will render our templates. -->
+      <ul id="contact_list"></ul>
+      <div id="contact_details"></div>
+      <form id='contact_form' onSubmit='return false'></form>
+      
+      <div class="clear">&nbsp;</div>
+    </div>
+    
+  </body>
+  
+  <!-- Include our actual application -->
+  <script src="contacts.js"></script>
+</html>
