@@ -14,7 +14,7 @@
     
     <script id="contact_list-template" type="x-ejs">
       <% _.each(collection.models, function(model) { %> 
-        <li id="<%= model.htmlId() %>">
+        <li>
          <%= model.get('name') %> | Phone: <%= model.prettyPhone() %>
          <span class="toolbar">
           <a href="#/details?cid=<%= model.cid %>">Details</a> | 
