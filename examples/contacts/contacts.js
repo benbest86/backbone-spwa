@@ -1,9 +1,7 @@
 (function(){
-  
   // MODELS
   // The model that will store our contact information.
   var Contact = Backbone.Model.extend({
-    
     // Format the phone number into a pretty format.
     prettyPhone: function() {
       var phone = this.get('phone') 
@@ -18,15 +16,39 @@
   // A collection wrapper around our Contact model.
   var ContactStore = Backbone.Collection.extend({
     model: Contact,
+    localStorage: 'contacts',
     // The name will be the default comparator.
     comparator : function(model) { return model.get('name'); }
   });
   
-  // Instantiate ContactStore, so that we can pre-populate the Collection.
+  // Setup Backbone.sync to use localStorage for persistence.
+  Backbone.sync = function(method, model, success, error) {
+    // Because of the nature of localStorage, we only need
+    // to handle two things, read and not read (Update, Delete, Create)
+    if(method == 'read') {
+      if(localStorage && localStorage.getItem(model.localStorage)) {
+        var data = localStorage.getItem(model.localStorage)
+        success(JSON.parse(data));
+      }
+    } else {
+      if(localStorage) {
+        // Do to Backbone not removing the model from the collection
+        // prior to the succes call, we need to call it first, before
+        // we save the data.
+        var collection = model.collection;
+        success(true); 
+
+        var data = JSON.stringify({ models: collection.models });
+        localStorage.setItem(collection.localStorage, data);
+      }
+    }
+  };
+  
+  // Instantiate ContactStore, and fetch the contacts with Backbone.sync
   var contacts = new ContactStore();
+  contacts.fetch();
   
   // VIEWS
-  
   // Main view - Lists contacts, is called when hash is set to #/ or no hash.
   var ContactListView = Backbone.SPWA.View.extend({
     el: $('#contact_list'),
@@ -78,11 +100,14 @@
       });
       
       // Set the data for the model. If it's not in the contacts store, add it.
+      // And set the localStorage object to the new set of contacts.
       this.model.set(data);
       if(!contacts.getByCid(this.model.cid)) { contacts.add(this.model); }
+      this.model.save();
       
       // Forward back to the contact list.
       location.hash = '/';
+      return false;
     }
   });
   
@@ -113,31 +138,34 @@
     },
     
     initialize : function() {
-      // Pre-populate with some interesting contacts.
-      contacts.add(new Contact({ 
-        name : 'Barack Obama', 
-        address: '1600 Pennsylvania Avenue NW, Washington, DC 20500', 
-        phone: '5559872938',
-        email: 'barack.obama@whitehouse.gov'
-      }));
-        
-      contacts.add(new Contact({ 
-        name : 'George W. Bush',
-        address: '1229 N Some St, Dallas, TX 75201',
-        phone: '5552989485',
-        email: 'w@yahoo.com',
-      }));
-      
-      contacts.add(new Contact({ 
-        name : 'Bill Clinton',
-        address: '9487 W 6th Ave, New York, NY 10001',
-        phone: '5554658878',
-        email: 'bill@hotmail.com'
-      }));
-      
+      // If there were'nt any contacts retreived from localStorage
+      // pre-populate with some interesting contacts.
+      if(contacts.models.length == 0) {
+        contacts.add(new Contact({ 
+          name : 'Barack Obama', 
+          address: '1600 Pennsylvania Avenue NW, Washington, DC 20500', 
+          phone: '5559872938',
+          email: 'barack.obama@whitehouse.gov'
+        }));
+
+        contacts.add(new Contact({ 
+          name : 'George W. Bush',
+          address: '1229 N Some St, Dallas, TX 75201',
+          phone: '5552989485',
+          email: 'w@yahoo.com',
+        }));
+
+        contacts.add(new Contact({ 
+          name : 'Bill Clinton',
+          address: '9487 W 6th Ave, New York, NY 10001',
+          phone: '5554658878',
+          email: 'bill@hotmail.com'
+        }));
+      }
+    
       // Bind change on #search_input and make sure this refers to this controller.
       var controller = this;
-      $('#search_input').change(function(){ controller.searchContacts(); });
+      $('#search_input').keyup(function(){ controller.searchContacts(); });
     },
     
     // Perform a search on the contacts collection.
@@ -150,12 +178,8 @@
         return model.get('name').match(regex);
       });
       
-      // No matches, display error. Clear search box.
-      if(matches.length == 0) { alert('No contacts matched your search criteria.'); $('#search_input').val(''); }
-      // One match, forward them to the contact's detais. Clear search box.
-      if(matches.length == 1) { location.hash = '#/details?cid=' + matches[0].cid; $('#search_input').val(''); }
       // More than one match, re-display contact list with a new collection, of just these matches.
-      if(matches.length > 1) { this.showContactList({ collection: new ContactStore(matches) }); }
+      this.showContactList({ collection: new ContactStore(matches) });
     },
     
     // Default route. Show contact list.
@@ -174,6 +198,8 @@
       
       // Otherwise set it to all contacts.
       else { view.collection = contacts; }
+      
+      c = view.collection;
       
       // Show the view, show will also call .render
       view.show();
@@ -215,9 +241,11 @@
       
       // Make sure the user really wants to delete it.
       var yn = confirm("Go ahead and delete " + contact.get('name') + " from your contacts?");
-      if(yn == true) { contacts.remove(args.cid); }
+      if(yn == true) { 
+        contact = contacts.getByCid(args.cid);
+        contact.destroy();
+      }
       location.hash = '/';
-      this.showContactList();
     }
   });
   
